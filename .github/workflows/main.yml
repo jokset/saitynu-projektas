@@ -32,5 +32,5 @@ jobs:
       with:
         heroku_api_key: ${{secrets.HEROKU_API_KEY}}
         heroku_email: "graphframejokubas@gmail.com"
-        heroku_app_name: "smart-annie"
+        heroku_app_name: "saitynu-projektas"
         appdir: "api"
