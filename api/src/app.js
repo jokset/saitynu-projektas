@@ -30,4 +30,4 @@ app.use('/api/tasks', tasksRouter)
 app.use('/api/tickets', ticketsRouter)
 app.use(mainRouter)
 
-app.listen(3000 || process.env.PORT)
+app.listen(process.env.PORT || 3000)
