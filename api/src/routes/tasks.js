@@ -22,7 +22,7 @@ router.get('/assignees', auth, (req, res) => {
     res.status(200).send({ message: 'Getting assignees' })
 })
 
-router.post('/assign', auth, (req, res) => {
+router.post('/assignees', auth, (req, res) => {
     res.status(200).send({ message: 'Assigning task to an organizer' })
 })
 
