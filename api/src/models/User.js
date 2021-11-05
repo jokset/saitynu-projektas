@@ -24,6 +24,11 @@ const userSchema = new mongoose.Schema({
     refreshToken: {
         token: String,
         expirationDate: Date
+    },
+    role: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Role',
+        required: true
     }
 }, {
     timestamps: true

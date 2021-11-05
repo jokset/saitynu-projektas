@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/user')
+const User = require('../models/user');
+const Role = require('../models/role');
 const { TokenExpiredError } = require('jsonwebtoken');
 
 const auth = async (req, res, next) => {
@@ -23,4 +24,24 @@ const auth = async (req, res, next) => {
     }
 }
 
-module.exports = auth
+const isAdmin = async (req, res, next) => {
+    const role = await Role.findOne({ _id: req.user.role });
+    if (!role) throw new Error("User has no role");
+        
+    if (role.name !== "Admin")
+        return res.status(401).send();
+    else
+        next();
+}
+
+const isOrganizer = async (req, res, next) => {
+    const role = await Role.findOne({ _id: req.user.role });
+    if (!role) throw new Error("User has no role");
+        
+    if (role.name !== "Organizer")
+        return res.status(401).send();
+    else
+        next();
+}
+
+module.exports = {auth, isAdmin, isOrganizer}
