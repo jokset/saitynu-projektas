@@ -1,5 +1,7 @@
 const express = require('express')
-const { auth } = require('../middleware/auth')
+const { Error } = require('mongoose')
+const { auth, isAdmin, isOrganizer } = require('../middleware/auth')
+const Event = require('../models/Event')
 const router = new express.Router()
 
 router.get('/me', auth, (req, res) => {
@@ -37,6 +39,30 @@ router.delete('/', auth, (req, res) => {
         res.status(201).send({ message: 'Deleting user ' + req.body.id })
     } else {
         res.status(400).send({ message: 'Missing param id' })
+    }
+})
+
+router.get('/:id/events/organized', [auth, isAdmin], async (req, res) => {
+    try {
+        const events = await Event.find({ organizers: req.params.id });
+        return res.status(200).send(events);
+    } catch (e) {
+        if (e instanceof Error.ValidationError)
+            return res.status(400).send({ error: true, message: e.message })
+        else
+            return res.status(500).send({ error: true, message: e.message })
+    }
+})
+
+router.get('/:id/events/owned', [auth, isAdmin], async (req, res) => {
+    try {
+        const events = await Event.find({ owner: req.params.id });
+        return res.status(200).send(events);
+    } catch (e) {
+        if (e instanceof Error.ValidationError)
+            return res.status(400).send({ error: true, message: e.message })
+        else
+            return res.status(500).send({ error: true, message: e.message })
     }
 })
 
