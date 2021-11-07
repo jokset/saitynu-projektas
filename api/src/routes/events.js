@@ -41,9 +41,37 @@ router.patch('/:id', [auth, isAdmin], async (req, res) => {
     }
 })
 
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', [auth, isAdmin], async (req, res) => {
     try {
         const event = await Event.findOneAndDelete({ _id: req.params.id, owner: req.user._id });
+        if (!event) return res.status(404).send({ error: true, message: "Resource not found" });
+        else return res.status(200).send(event);
+    } catch (e) {
+        if (e instanceof Error.ValidationError)
+            return res.status(400).send({ error: true, message: e.message })
+        else
+            return res.status(500).send({ error: true, message: e.message })
+    }
+})
+
+router.post('/:id/organizers', [auth, isAdmin], async (req, res) => {
+    try {
+        const event = await Event.findOneAndUpdate({ _id: req.params.id, owner: req.user._id }, 
+            { $addToSet: { organizers: req.body.id } }, { new: true, runValidators: true });
+        if (!event) return res.status(404).send({ error: true, message: "Resource not found" });
+        else return res.status(200).send(event);
+    } catch (e) {
+        if (e instanceof Error.ValidationError)
+            return res.status(400).send({ error: true, message: e.message })
+        else
+            return res.status(500).send({ error: true, message: e.message })
+    }
+})
+
+router.delete('/:id/organizers/:userId', [auth, isAdmin], async (req, res) => {
+    try {
+        const event = await Event.findOneAndUpdate({ _id: req.params.id, owner: req.user._id }, 
+            { $pull: { organizers: req.params.userId } }, { new: true, runValidators: true });
         if (!event) return res.status(404).send({ error: true, message: "Resource not found" });
         else return res.status(200).send(event);
     } catch (e) {
