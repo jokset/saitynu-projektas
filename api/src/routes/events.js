@@ -16,7 +16,7 @@ router.get('/', [auth, isAdmin], async (req, res) => {
 
 router.post('/', [auth, isAdmin], async (req, res) => {
     try {
-        const event = new Event(req.body);
+        const event = new Event({ ...req.body, owner: req.user._id });
         await event.save();
         return res.status(201).send(event);
     } catch (e) {
@@ -29,7 +29,8 @@ router.post('/', [auth, isAdmin], async (req, res) => {
 
 router.patch('/:id', [auth, isAdmin], async (req, res) => {
     try {
-        const event = await Event.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true, runValidators: true });
+        const event = await Event.findOneAndUpdate({ _id: req.params.id, owner: req.user._id }, 
+            req.body, { new: true, runValidators: true });
         if (!event) return res.status(404).send({ error: true, message: "Resource not found" });
         else return res.status(200).send(event);
     } catch (e) {
@@ -42,7 +43,7 @@ router.patch('/:id', [auth, isAdmin], async (req, res) => {
 
 router.delete('/:id', auth, async (req, res) => {
     try {
-        const event = await Event.findOneAndDelete({ _id: req.params.id });
+        const event = await Event.findOneAndDelete({ _id: req.params.id, owner: req.user._id });
         if (!event) return res.status(404).send({ error: true, message: "Resource not found" });
         else return res.status(200).send(event);
     } catch (e) {
