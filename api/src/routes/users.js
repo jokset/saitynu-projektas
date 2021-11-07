@@ -42,7 +42,7 @@ router.delete('/', auth, (req, res) => {
     }
 })
 
-router.get('/:id/events/organized', [auth, isAdmin], async (req, res) => {
+router.get('/:id/events/organized', auth, async (req, res) => {
     try {
         const events = await Event.find({ organizers: req.params.id });
         return res.status(200).send(events);
@@ -56,8 +56,20 @@ router.get('/:id/events/organized', [auth, isAdmin], async (req, res) => {
 
 router.get('/:id/events/owned', [auth, isAdmin], async (req, res) => {
     try {
-        const events = await Event.find({ owner: req.params.id });
+        const events = await Event.find({ owner: req.params.id === 'me' ? req.user._id : req.params.id });
         return res.status(200).send(events);
+    } catch (e) {
+        if (e instanceof Error.ValidationError)
+            return res.status(400).send({ error: true, message: e.message })
+        else
+            return res.status(500).send({ error: true, message: e.message })
+    }
+})
+
+router.get('/:id/tasks/assigned', auth, async (req, res) => {
+    try {
+        const tasks = await Event.find({ assignees: req.params.id === 'me' ? req.user._id : req.params.id });
+        return res.status(200).send(tasks);
     } catch (e) {
         if (e instanceof Error.ValidationError)
             return res.status(400).send({ error: true, message: e.message })
