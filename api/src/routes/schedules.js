@@ -1,13 +1,24 @@
 const express = require('express')
 const { auth } = require('../middleware/auth')
 const router = new express.Router()
+const { Error } = require('mongoose')
+const Schedule = require('../models/Schedule')
 
 router.get('/', auth, (req, res) => {
     res.status(200).send({ message: 'Getting schedule' })
 })
 
-router.post('/', auth, (req, res) => {
-    res.status(200).send({ message: 'Adding schedule' })
+router.post('/', auth, async (req, res) => {
+    try {
+        const schedule = new Schedule(req.body);
+        await schedule.save();
+        return res.status(201).send(schedule);
+    } catch (e) {
+        if (e instanceof Error.ValidationError)
+            return res.status(400).send({ error: true, message: e.message });
+        else
+            return res.status(500).send({ error: true, message: e.message });
+    }
 })
 
 router.patch('/', auth, (req, res) => {
