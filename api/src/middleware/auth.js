@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const Role = require('../models/role');
 const { TokenExpiredError } = require('jsonwebtoken');
+const Event = require('../models/Event');
 
 const auth = async (req, res, next) => {
     try {
@@ -44,4 +45,9 @@ const isOrganizer = async (req, res, next) => {
         next();
 }
 
-module.exports = {auth, isAdmin, isOrganizer}
+const isPermittedToEvent = async (req, eventId) => {
+    const event = await Event.findOne({ _id: eventId })
+    return event.owner == req.user.id || event.organizers.includes(req.user.id)
+}
+
+module.exports = {auth, isAdmin, isOrganizer, isPermittedToEvent}
