@@ -26,6 +26,7 @@ const scheduleEventSchema = new mongoose.Schema({
 scheduleEventSchema.pre('validate', function(next) {
     if (this.start >= this.end) {
         this.invalidate('end', 'Ending time must be greater than starting time', this.end);
+        next();
     } 
 
     next();
