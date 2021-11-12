@@ -1,7 +1,7 @@
 const express = require('express')
 const { Error } = require('mongoose')
 const { auth, isAdmin } = require('../middleware/auth')
-const Event = require('../models/Event')
+const Event = require('../models/event')
 const User = require('../models/user')
 const router = new express.Router()
 

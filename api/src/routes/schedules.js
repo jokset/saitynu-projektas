@@ -2,7 +2,7 @@ const express = require('express')
 const { auth, isAdmin, isPermittedToEvent } = require('../middleware/auth')
 const router = new express.Router()
 const { Error } = require('mongoose')
-const Schedule = require('../models/Schedule')
+const Schedule = require('../models/schedule')
 
 router.post('/:scheduleId/items', auth, async (req, res) => {
     try {

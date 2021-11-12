@@ -1,7 +1,7 @@
 const express = require('express')
 const { auth, isAdmin } = require('../middleware/auth')
-const Event = require('../models/Event')
-const Task = require('../models/Task')
+const Event = require('../models/event')
+const Task = require('../models/task')
 const router = new express.Router()
 const { Error } = require('mongoose')
 

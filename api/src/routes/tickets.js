@@ -1,6 +1,6 @@
 const express = require('express');
 const { auth, isAdmin } = require('../middleware/auth');
-const Ticket = require('../models/Ticket');
+const Ticket = require('../models/ticket');
 const router = new express.Router();
 const { Error } = require('mongoose');
 

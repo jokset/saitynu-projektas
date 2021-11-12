@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const Role = require('../models/role');
 const { TokenExpiredError } = require('jsonwebtoken');
-const Event = require('../models/Event');
+const Event = require('../models/event');
 
 const auth = async (req, res, next) => {
     try {
