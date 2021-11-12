@@ -32,4 +32,4 @@ app.use('/api/tasks', tasksRouter)
 app.use('/api/tickets', ticketsRouter)
 app.use(mainRouter)
 
-app.listen(process.env.PORT || 3000)
+app.listen(process.env.PORT || 3000, () => console.log("Server started"))
