@@ -34,3 +34,11 @@ jobs:
         heroku_email: "graphframejokubas@gmail.com"
         heroku_app_name: "saitynu-projektas"
         appdir: "api"
+      env:
+        MONGO_USR: ${{secrets.MONGO_USR}}
+        MONGO_PWD: ${{secrets.MONGO_PWD}}
+        MONGO_HOST: ${{secrets.MONGO_HOST}}
+        MONGO_DBNAME: ${{secrets.MONGO_DBNAME}}
+        JWT_SECRET: ${{secrets.JWT_SECRET}}
+        ACCESS_EXPIRATION: ${{secrets.ACCESS_EXPIRATION}}
+        REFRESH_EXPIRATION: ${{secrets.REFRESH_EXPIRATION}}
