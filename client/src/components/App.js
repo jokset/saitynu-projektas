@@ -8,13 +8,17 @@ import {
 } from "react-router-dom";
 import { useAuth } from '../context/auth';
 import Dashboard from "../pages/Dashboard";
+import Tasks from "../pages/Tasks";
+import Header from './ui/Header';
 
 const App = () => {
     return (
         <Router>
+            <Header />
             <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/dashboard" element={<RequireAuth><Dashboard /></RequireAuth>} />
+                <Route path="/tasks" element={<RequireAuth><Tasks /></RequireAuth>} />
             </Routes>
         </Router>
     );

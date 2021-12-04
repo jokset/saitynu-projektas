@@ -1,8 +1,37 @@
 @import 'bulma/css/bulma.css';
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 
 body {
     margin: 0;
     padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    color: #000;
+}
+
+.is-rounded {
+    border-radius: 100%;
+}
+
+.status {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+}
+
+.status.done {
+    background-color: yellowgreen;
+}
+
+.status.inprogress {
+    background-color: orange;
+}
+
+.status.todo {
+    background-color: crimson;
+}
+
+.is-fullwidth {
+    width: 100%;
 }
 
 .navbar-menu.is-active {
@@ -13,6 +42,11 @@ body {
     position: fixed;
     width: 100vw;
     top: 0;
+}
+
+.navbar-item.is-active {
+    font-weight: bolder;
+    border-bottom: 3px solid #3e8ed0;
 }
 
 @keyframes navAnim {

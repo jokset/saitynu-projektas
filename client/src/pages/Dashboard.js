@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import EventCard from "../components/events/EventCard";
-import Header from "../components/ui/Header";
 import client from "../networking";
 
 const Dashboard = () => {
@@ -19,22 +18,18 @@ const Dashboard = () => {
                 setEvents([]);
             }
         })();
-    });
+    }, []);
 
     return (
-        <>
-            <Header />
-            
-            <div className="container mt-6 pt-4">
-                <div className="columns">
-                    {events && events.map(e => (
-                        <div className="column is-4">
-                            <EventCard event={e} />
-                        </div>   
-                    ))}
-                </div>
+        <div className="container mt-6 pt-4">
+            <div className="columns">
+                {events && events.map(e => (
+                    <div className="column is-4">
+                        <EventCard event={e} />
+                    </div>   
+                ))}
             </div>
-        </>
+        </div>
     );
 }
 
