@@ -6,7 +6,7 @@ const Event = require('../models/event');
 
 const auth = async (req, res, next) => {
     try {
-        var token = req.header('Authorization') ? req.header('Authorization').replace('Bearer ', '') : undefined;
+        var token = req.header('Authorization') ? req.header('Authorization').replace('Bearer ', '') : req.cookies.access_token;
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const user = await User.findOne({ _id: decoded._id });
@@ -21,7 +21,7 @@ const auth = async (req, res, next) => {
         if (e instanceof TokenExpiredError)
             return res.status(401).send({error: true, message: "Access token has expired"});
         else
-            return res.status(500).send({error: true, message: e.message});
+            return res.status(401).send({error: true, message: e.message});
     }
 }
 
@@ -30,7 +30,7 @@ const isAdmin = async (req, res, next) => {
     if (!role) throw new Error("User has no role");
         
     if (role.name !== "Admin")
-        return res.status(401).send();
+        return res.status(403).send();
     else
         next();
 }

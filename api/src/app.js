@@ -17,7 +17,12 @@ const publicDirectoryPath = path.join(__dirname, '../build')
 
 const app = express();
 
-app.use(cors({origin: 'null'}))
+var corsOptions = {
+    origin: process.env.CLIENT,
+    credentials : true
+}
+
+app.use(cors(corsOptions));
 app.use(cookieParser())
 app.use(express.urlencoded({ limit: '50mb', extended: false }))
 app.use(express.json({limit: '50mb'}))
