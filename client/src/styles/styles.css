@@ -1,1 +1,20 @@
 @import 'bulma/css/bulma.css';
+
+.navbar-menu.is-active {
+    animation: navAnim .2s ease-in-out;
+}
+
+@keyframes navAnim {
+  0% {
+    display: none;
+    opacity: 0;
+  }
+  1% {
+    display: block;
+    transform: translateY(-100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
