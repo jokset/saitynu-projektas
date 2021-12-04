@@ -6,8 +6,8 @@ const Header = () => {
     const location = useLocation();
 
     return (
-        <div className="container">
-            <nav className="navbar" role="navigation" aria-label="main navigation">
+        <nav className="navbar" role="navigation" aria-label="main navigation">
+            <div className="container">
                 <div className="navbar-brand">
                     <div className="navbar-item">
                         Events System
@@ -43,8 +43,8 @@ const Header = () => {
                     </div>
                     </div>
                 </div>
-            </nav>
-        </div>
+            </div>
+        </nav>
     );
 }
 

@@ -1,7 +1,18 @@
 @import 'bulma/css/bulma.css';
 
+body {
+    margin: 0;
+    padding: 0;
+}
+
 .navbar-menu.is-active {
     animation: navAnim .2s ease-in-out;
+}
+
+.navbar {
+    position: fixed;
+    width: 100vw;
+    top: 0;
 }
 
 @keyframes navAnim {
