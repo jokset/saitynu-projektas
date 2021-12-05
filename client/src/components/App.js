@@ -10,8 +10,12 @@ import { useAuth } from '../context/auth';
 import Dashboard from "../pages/Dashboard";
 import Tasks from "../pages/Tasks";
 import Header from './ui/Header';
+import Event from "../pages/Event";
+import Modal from "react-modal";
 
 const App = () => {
+    Modal.setAppElement('#root');
+
     return (
         <Router>
             <Header />
@@ -19,6 +23,7 @@ const App = () => {
                 <Route path="/login" element={<Login />} />
                 <Route path="/dashboard" element={<RequireAuth><Dashboard /></RequireAuth>} />
                 <Route path="/tasks" element={<RequireAuth><Tasks /></RequireAuth>} />
+                <Route path="/event/:id" element={<RequireAuth><Event /></RequireAuth>} />
             </Routes>
         </Router>
     );
