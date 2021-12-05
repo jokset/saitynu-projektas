@@ -10,7 +10,7 @@ const Tasks = () => {
         (async () => {
             try {
                 const { data } = await client({
-                    url: '/tasks',
+                    url: '/tasks/mine',
                     method: 'GET'
                 });
 

@@ -84,6 +84,11 @@ const Event = () => {
         } catch (e) {}
     }
 
+    const handleAssign = (task) => {
+        console.log(task)
+        setTasks(tasks.map(t => t._id === task._id ? task : t));
+    }
+
     if (!event) return null;
     return event && (
         <div className="container pl-2 pr-2">
@@ -158,7 +163,7 @@ const Event = () => {
                         <button className="button is-info">Add a new task</button>
                     </div>
                     {tasks && tasks.map(t => {
-                        return <Task task={t} />
+                        return <Task task={t} onAssign={handleAssign} />
                     })}
                 </div>
             </div>
