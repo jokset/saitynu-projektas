@@ -22,17 +22,17 @@ function join(t, a) {
     } catch (e) {
         return new Date();
     }
- }
+}
 
 const NewTaskForm = ({ data, onSubmit = () => null }) => {
     const [name, setName] = useState(data && data.name ? data.name : "");
-    const [description, setDescription] = useState(data && data.description ? data.name : "");
-    const [deadline, setDeadline] = useState(data && data.date ? data.date : new Date());
+    const [description, setDescription] = useState(data && data.description ? data.description : "");
+    const [deadline, setDeadline] = useState(data && data.deadline ? new Date(data.deadline) : new Date());
     const [state, setState] = useState(data && data.state ? data.state : 'todo');
        
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         try {
             const { data: task } = await client({
                 url: `/tasks`,
