@@ -196,7 +196,11 @@ const Event = () => {
                             {event.description}
                         </span>
 
-                        <button className="button is-secondary is-fullwidth mt-4 mb-2">View Timeline</button>
+                        <button className="button is-secondary is-fullwidth mt-4 mb-2"
+                            onClick={() => navigate('./schedule')}
+                        >
+                            View Timeline
+                        </button>
                         <button className="button is-secondary mr-2 is-fullwidth mb-2"
                             onClick={() => setModalOpen(true)}>Manage Organizers</button>
                         <button className="button is-secondary is-fullwidth mb-2"

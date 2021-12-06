@@ -12,6 +12,7 @@ import Tasks from "../pages/Tasks";
 import Header from './ui/Header';
 import Event from "../pages/Event";
 import Modal from "react-modal";
+import Schedule from "../pages/Schedule";
 
 const App = () => {
     Modal.setAppElement('#root');
@@ -24,6 +25,7 @@ const App = () => {
                 <Route path="/dashboard" element={<RequireAuth><Dashboard /></RequireAuth>} />
                 <Route path="/tasks" element={<RequireAuth><Tasks /></RequireAuth>} />
                 <Route path="/event/:id" element={<RequireAuth><Event /></RequireAuth>} />
+                <Route path="/event/:id/schedule" element={<RequireAuth><Schedule /></RequireAuth>} />
             </Routes>
         </Router>
     );
