@@ -21,7 +21,7 @@ const StyledOrganizer = styled.div`
     align-items: center;
 `;
 
-const Task = ({task, onAssign, onChangeTaskState = () => null}) => {
+const Task = ({task, onAssign, onChangeTaskState = () => null, onDelete}) => {
     const [taskState, setTaskState] = useState(task);
     const [modalOpen, setModalOpen] = useState(false);
     const [users, setUsers] = useState([]);
@@ -65,7 +65,6 @@ const Task = ({task, onAssign, onChangeTaskState = () => null}) => {
                     method: 'PATCH',
                     data: { id }
                 });
-                console.log(data)
 
                 setTaskState(data);
                 onAssign(data);
@@ -78,6 +77,17 @@ const Task = ({task, onAssign, onChangeTaskState = () => null}) => {
                 setTaskState(data);
                 onAssign(data);
             }
+        } catch (e) {}
+    }
+
+    const deleteTask = async () => {
+        try {
+            const { data } = await client({
+                url: `/tasks/${task._id}`,
+                method: 'DELETE'
+            });
+
+            onDelete(data);
         } catch (e) {}
     }
 
@@ -144,6 +154,14 @@ const Task = ({task, onAssign, onChangeTaskState = () => null}) => {
                             defaultValue={options.find(v => v.value === taskState.state)}
                             onChange={({ value }) => onChangeState(value)}
                         />
+                        {onDelete && 
+                            <button className="button is-danger is-inverted ml-2" 
+                                onClick={deleteTask}>
+                                <span class="icon is-small">
+                                    <span className="material-icons">delete_outline</span>
+                                </span>
+                            </button>
+                        }
                     </div>
                 </div>
             </StyledTask>

@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router";
 import EventCard from "../components/events/EventCard";
 import client from "../networking";
 
 const Dashboard = () => {
     const [events, setEvents] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         (async () => {
@@ -25,7 +27,7 @@ const Dashboard = () => {
             <div className="columns">
                 {events && events.map(e => (
                     <div className="column is-4">
-                        <EventCard event={e} />
+                        <EventCard event={e} onClickView={() => navigate('/event/' + e._id)} />
                     </div>   
                 ))}
             </div>

@@ -4,6 +4,8 @@ import client from "../networking";
 import styled from "styled-components";
 import Task from "../components/tasks/Task";
 import Modal from "react-modal";
+import DrawerPortal from "../components/ui/DrawerPortal";
+import NewTaskForm from "../components/tasks/NewTaskForm";
 
 const StyledSidebar = styled.div`
     border: 1px solid #eeeeee;
@@ -31,9 +33,10 @@ const StyledOrganizer = styled.div`
 
 const Event = () => {
     const [event, setEvent] = useState();
-    const [tasks, setTasks] = useState();
-    const [users, setUsers] = useState();
+    const [tasks, setTasks] = useState([]);
+    const [users, setUsers] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
+    const [drawerState, setDrawerState] = useState(false);
 
     const params = useParams();
 
@@ -85,13 +88,26 @@ const Event = () => {
     }
 
     const handleAssign = (task) => {
-        console.log(task)
         setTasks(tasks.map(t => t._id === task._id ? task : t));
     }
 
-    if (!event) return null;
-    return event && (
+    const handleDelete = (task) => {
+        setTasks(tasks.filter(t => t._id === task._id ? undefined : t));
+    }
+
+    const handleTaskSubmit = (task) => {
+        const newTasks = [...tasks];
+        newTasks.push(task);
+        setTasks(newTasks);
+        setDrawerState(false);
+    }
+
+    return (
         <div className="container pl-2 pr-2">
+            {event && <DrawerPortal title="New Task" isOpen={drawerState} onClose={() => setDrawerState(false)}>
+                <NewTaskForm data={{event: event._id}} onSubmit={handleTaskSubmit} />
+            </DrawerPortal>}
+
             <Modal
                 isOpen={modalOpen}
                 onRequestClose={() => setModalOpen(false)}
@@ -109,7 +125,7 @@ const Event = () => {
                     },
                 }}
             >
-                {users && event.organizers && users.map(o => {
+                {users && event && event.organizers && users.map(o => {
                     const has = event.organizers.find((v) => v._id === o._id);
 
                     return (
@@ -124,46 +140,48 @@ const Event = () => {
                 })}
             </Modal>
             <div className="columns mt-6 pt-4">
-                <StyledSidebar className="column is-4 p-4">
-                    <h1 className="is-size-3 has-text-weight-bold mb-4">{event.name}</h1>
-                    <span className="is-flex is-align-items-center mb-2">
-                        <span class="icon is-small mr-2">
-                            <span className="material-icons">event</span>
+                <StyledSidebar className="column is-4 p-4 mb-2">
+                    {event && <>
+                        <h1 className="is-size-3 has-text-weight-bold mb-4">{event ? event.name : ""}</h1>
+                        <span className="is-flex is-align-items-center mb-2">
+                            <span class="icon is-small mr-2">
+                                <span className="material-icons">event</span>
+                            </span>
+                            {new Date(event.date).toLocaleDateString()}
                         </span>
-                        {new Date(event.date).toLocaleDateString()}
-                    </span>
-                    <span className="is-flex is-align-items-center mb-2">
-                        <span class="icon is-small mr-2">
-                            <span className="material-icons">place</span>
+                        <span className="is-flex is-align-items-center mb-2">
+                            <span class="icon is-small mr-2">
+                                <span className="material-icons">place</span>
+                            </span>
+                            {event.location}
                         </span>
-                        {event.location}
-                    </span>
-                    <span className="is-flex is-align-items-center mb-2">
-                        <span class="icon is-small mr-2">
-                            <span className="material-icons">people</span>
+                        <span className="is-flex is-align-items-center mb-2">
+                            <span class="icon is-small mr-2">
+                                <span className="material-icons">people</span>
+                            </span>
+                            {event.capacity}
                         </span>
-                        {event.capacity}
-                    </span>
-                    <span className="is-flex is-align-items-center mb-2">
-                        <span class="icon is-small mr-2">
-                            <span className="material-icons">notes</span>
+                        <span className="is-flex is-align-items-center mb-2">
+                            <span class="icon is-small mr-2">
+                                <span className="material-icons">notes</span>
+                            </span>
+                            {event.description}
                         </span>
-                        {event.description}
-                    </span>
 
-                    <button className="button is-secondary is-fullwidth mt-4 mb-2">View Timeline</button>
-                    <button className="button is-secondary mr-2 is-fullwidth mb-2"
-                        onClick={() => setModalOpen(true)}>Manage Organizers</button>
-                    <button className="button is-secondary is-fullwidth mb-2">Edit Details</button>
-                    <button className="button is-danger is-fullwidth">Delete</button>
+                        <button className="button is-secondary is-fullwidth mt-4 mb-2">View Timeline</button>
+                        <button className="button is-secondary mr-2 is-fullwidth mb-2"
+                            onClick={() => setModalOpen(true)}>Manage Organizers</button>
+                        <button className="button is-secondary is-fullwidth mb-2">Edit Details</button>
+                        <button className="button is-danger is-fullwidth">Delete</button>
+                    </>}
                 </StyledSidebar>
                 <div className="column">
                     <div className="is-flex is-align-items-center is-justify-content-space-between mb-2">
                         <h1 className="is-size-3 has-text-weight-bold">Tasks</h1>
-                        <button className="button is-info">Add a new task</button>
+                        <button className="button is-info" onClick={() => setDrawerState(true)}>Add a new task</button>
                     </div>
                     {tasks && tasks.map(t => {
-                        return <Task task={t} onAssign={handleAssign} />
+                        return <Task task={t} onAssign={handleAssign} onDelete={handleDelete} />
                     })}
                 </div>
             </div>

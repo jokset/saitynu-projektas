@@ -62,7 +62,7 @@ const Tasks = () => {
                     </div>
                 </div>
 
-                <div className="columns mt-4">
+                <div className="mt-4">
                     {tasks && tasks.map(t => (
                         !t.hidden && <Task key={t._id} task={t} onChangeTaskState={handleTaskStateChange}/>
                     ))}
