@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Schedule = require('./schedule');
 
 const eventSchema = new mongoose.Schema({
     name: {
@@ -39,6 +40,19 @@ const eventSchema = new mongoose.Schema({
     timestamps: true,
     strict: 'throw'
 });
+
+eventSchema.pre('save', async function (next) {
+    const schedule = new Schedule({
+        name: this.name + ' Schedule',
+        date: this.date,
+        event: this._id,
+        location: this.location
+    })
+
+    await schedule.save()
+
+    next()
+})
 
 const Event = mongoose.model('Event', eventSchema);
 

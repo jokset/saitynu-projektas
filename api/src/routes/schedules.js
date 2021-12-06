@@ -96,7 +96,7 @@ router.get('/', [auth, isAdmin], async (req, res) => {
 
 router.get('/:id', auth, async (req, res) => {
     try {
-        const schedule = await Schedule.findOne({ _id: req.params.id });
+        const schedule = await Schedule.findOne({ event: req.params.id });
         if ((await isPermittedToEvent(req, schedule.event)))
             return res.status(201).send(schedule);
         else 

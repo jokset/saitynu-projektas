@@ -9,14 +9,18 @@ router.get('/me', auth, (req, res) => {
     res.status(200).send(req.user);
 })
 
-router.get('/:id', [auth, isAdmin], async (req, res) => {
+router.get('/:id?', [auth, isAdmin], async (req, res) => {
     try {
-        const user = await User.findOne({ _id: req.params.id });
+        var data
+        if (req.params.id)
+            data = await User.findOne({ _id: req.params.id });
+        else
+            data = await User.find({});
 
-        if (!user) 
+        if (!data) 
             return res.status(404).send({ error: true, message: "Resource not found" });
 
-        return res.status(200).send(user);
+        return res.status(200).send(data);
     } catch (e) {
         if (e instanceof Error.ValidationError)
             return res.status(400).send({ error: true, message: e.message });

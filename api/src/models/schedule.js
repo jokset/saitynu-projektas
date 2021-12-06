@@ -19,8 +19,7 @@ const scheduleEventSchema = new mongoose.Schema({
         max: 1440
     }
 }, {
-    timestamps: true,
-    strict: 'throw'
+    timestamps: true
 });
 
 scheduleEventSchema.pre('validate', function(next) {

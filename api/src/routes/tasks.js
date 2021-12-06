@@ -13,11 +13,20 @@ router.get('/', [auth, isAdmin], async (req, res) => {
     }
 })
 
+router.get('/mine', auth, async (req, res) => {
+    try {
+        const tasks = await Task.find({ assignees: req.user._id });
+        return res.status(200).send(tasks);
+    } catch (e) {
+        return res.status(500).send({ error: true, message: e.message });
+    }
+})
+
 router.get('/:id', auth, async (req, res) => {
     try {
         const task = await Task.findOne({ _id: req.params.id, $or: [
-            {assignee: req.user._id}, {owner: req.user._id}
-        ]});
+            {assignees: req.user._id}, {owner: req.user._id}
+        ]}).populate('assignees');
 
         if (!task) return res.status(404).send({ error: true, message: "Resource not found" });
 
@@ -109,11 +118,11 @@ router.patch('/:id/assignees', auth, async (req, res) => {
 
         const assignees = admin ? 
         await Task.findOneAndUpdate({ _id: req.params.id },
-            { $addToSet: { assignees: req.body.id } }, { new: true, runValidators: true })
+            { $addToSet: { assignees: req.body.id } }, { new: true, runValidators: true }).populate('assignees')
         :
         await Task.findOneAndUpdate({ _id: req.params.id, $or: [
             { assignees: req.user._id }, { owner: req.user._id }
-        ]}, { $addToSet: { assignees: req.body.id } }, { new: true, runValidators: true });
+        ]}, { $addToSet: { assignees: req.body.id } }, { new: true, runValidators: true }).populate('assignees');
 
         if (!assignees) 
             return res.status(404).send({ error: true, message: "Resource not found" });
@@ -131,11 +140,11 @@ router.delete('/:id/assignees/:userId', auth, async (req, res) => {
         const assignees = admin ? 
         await Task.findOneAndUpdate({ _id: req.params.id, assignees: req.params.userId },
             { $pull: { assignees: req.params.userId } },
-            { new: true, runValidators: true })
+            { new: true, runValidators: true }).populate('assignees')
         :
         await Task.findOneAndUpdate({ _id: req.params.id, assignees: req.params.userId, $or: [
             { assignees: req.user._id }, { owner: req.user._id }
-        ]}, { $pull: { assignees: req.params.userId } }, { new: true, runValidators: true });
+        ]}, { $pull: { assignees: req.params.userId } }, { new: true, runValidators: true }).populate('assignees');
 
         if (!assignees) 
             return res.status(404).send({ error: true, message: "Resource not found" });
