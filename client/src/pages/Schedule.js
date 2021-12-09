@@ -32,8 +32,15 @@ const Schedule = () => {
         setDrawerState({ open: false, op: undefined })
     }
 
+    const onScheduleItemDelete = (id) => {
+        const scheduleCopy = {...schedule}
+        scheduleCopy.scheduleEvents = scheduleCopy.scheduleEvents.filter(i => i._id !== id);
+        setSchedule(scheduleCopy);
+        setDrawerState({ open: false, op: undefined })
+    }
+
     if (!schedule) return null;
-    return (
+    return schedule && (
         <div className="container mt-6 pt-4">
             <DrawerPortal title="New Event" isOpen={drawerState.open} 
                 onClose={() => setDrawerState({ open: false, op: undefined})}
@@ -61,8 +68,8 @@ const Schedule = () => {
                 day: 'numeric'
             })}</p>
 
-            {schedule.scheduleEvents.sort((a, b) => a.start - b.start).map((e) => 
-                <ScheduleItem data={e} onDelete={() => null} onUpdate={() => null} />
+            {schedule.scheduleEvents && schedule.scheduleEvents.sort((a, b) => a.start - b.start).map((e) => 
+                <ScheduleItem key={e._id} data={{schedule: schedule._id, ...e}} onDelete={onScheduleItemDelete} />
             )}
         </div>
     );

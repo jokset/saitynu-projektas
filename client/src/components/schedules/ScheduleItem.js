@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import client from "../../networking";
 
 const StyledItem = styled.div`
     & .time {
@@ -23,6 +24,18 @@ const minutesToTime = (start, end) => {
 }
 
 const ScheduleItem = ({ data, onUpdate, onDelete }) => {
+    const handleDelete = async () => {
+        try {
+            await client({
+                url: `/schedules/${data.schedule}/items/${data._id}`,
+                method: 'DELETE'
+            });
+            onDelete(data._id);
+        } catch (e) {
+            console.log(e.response ? e.response.data.message : e.message);
+        }
+    }
+
     if (!data) return null;
     return data && (
         <StyledItem className="box is-fullwidth">
@@ -61,7 +74,7 @@ const ScheduleItem = ({ data, onUpdate, onDelete }) => {
                     </>}
                     {onDelete && <>
                         <button className="button is-secondary ml-2" 
-                            onClick={() => null}>
+                            onClick={handleDelete}>
                             <span class="icon is-small">
                                 <span className="material-icons">delete_outline</span>
                             </span>

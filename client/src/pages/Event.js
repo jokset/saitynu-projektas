@@ -7,6 +7,7 @@ import Modal from "react-modal";
 import DrawerPortal from "../components/ui/DrawerPortal";
 import NewTaskForm from "../components/tasks/NewTaskForm";
 import EventForm from "../components/events/EventForm";
+import { useAuth } from '../context/auth';
 
 const StyledSidebar = styled.div`
     border: 1px solid #eeeeee;
@@ -39,6 +40,7 @@ const Event = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [drawerState, setDrawerState] = useState({ open: false, which: 0 });
     const navigate = useNavigate();
+    const { currentUser } = useAuth();
 
     const params = useParams();
 
@@ -55,16 +57,19 @@ const Event = () => {
                     method: 'GET'
                 });
 
+                setEvent(event);
+                setTasks(task);
+            } catch (e) {
+            }
+
+            try {
                 const { data: users } = await client({
                     url: `/users`,
                     method: 'GET'
                 });
 
-                setEvent(event);
-                setTasks(task);
                 setUsers(users);
-            } catch (e) {
-            }
+            } catch (e) {}
         })();
     }, [params.id]);
 
@@ -201,17 +206,17 @@ const Event = () => {
                         >
                             View Timeline
                         </button>
-                        <button className="button is-secondary mr-2 is-fullwidth mb-2"
-                            onClick={() => setModalOpen(true)}>Manage Organizers</button>
-                        <button className="button is-secondary is-fullwidth mb-2"
+                        {currentUser.role.name === 'Admin' && <button className="button is-secondary mr-2 is-fullwidth mb-2"
+                            onClick={() => setModalOpen(true)}>Manage Organizers</button>}
+                        {currentUser.role.name === 'Admin' && <button className="button is-secondary is-fullwidth mb-2"
                             onClick={() => setDrawerState({ open: true, which: 1 })}>
                             Edit Details
-                        </button>
-                        <button className="button is-danger is-fullwidth"
+                        </button>}
+                        {currentUser.role.name === 'Admin' && <button className="button is-danger is-fullwidth"
                             onClick={deleteEvent}
                         >
                             Delete
-                        </button>
+                        </button>}
                     </>}
                 </StyledSidebar>
                 <div className="column">
