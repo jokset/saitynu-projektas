@@ -8,8 +8,8 @@ const EventCard = ({ event, onClickView, onClickDelete }) => {
                 </p>
             </header>
             <div class="card-image">
-                <figure class="image is-4by3">
-                    <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder" />
+                <figure class="image">
+                    <img src="https://cdn.dribbble.com/users/483592/screenshots/9394838/media/db27140b922ff33387c511d00589216f.png" alt="Placeholder" />
                 </figure>
             </div>
             <div class="card-content">

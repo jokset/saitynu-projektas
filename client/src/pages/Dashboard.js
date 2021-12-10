@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import EventCard from "../components/events/EventCard";
 import EventForm from "../components/events/EventForm";
 import DrawerPortal from "../components/ui/DrawerPortal";
+import { useAuth } from "../context/auth";
 import client from "../networking";
 
 const Dashboard = () => {
@@ -10,6 +11,7 @@ const Dashboard = () => {
     const [drawerState, setDrawerState] = useState({ open: false, id: undefined });
 
     const navigate = useNavigate();
+    const { currentUser } = useAuth();
 
     useEffect(() => {
         (async () => {
@@ -46,13 +48,13 @@ const Dashboard = () => {
                     <h1 className="is-size-2 has-text-weight-bold">Your events</h1>
                     <p>These are the events that you manage or organize.</p>
                 </div>
-                <div className="column is-narrow">
+                {currentUser.role.name === 'Admin' && <div className="column is-narrow">
                     <button className="button is-info" 
                         onClick={() => setDrawerState({ open: true, which: 0 })}
                     >
                         Create a new event
                     </button>
-                </div>
+                </div>}
             </div>
 
             <div className="columns">

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Notification } from 'react-bulma-components';
+import { useNavigate } from 'react-router';
 import { useAuth } from '../context/auth';
 
 const Login = () => {
@@ -7,19 +8,21 @@ const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const { login } = useAuth();
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
             await login({ email, password });
+            navigate('/dashboard');
         } catch(e) {
             setError(e.response.data.message ? e.response.data.message : "An unknown error occurred");
         }
     }
 
     return (
-        <div className="hero is-fullheight">
+        <div className="login hero is-fullheight">
             <div className="hero-body container">
                 <div className="columns is-vcentered">
                     <div className="login">
