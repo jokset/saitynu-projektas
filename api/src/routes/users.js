@@ -6,16 +6,16 @@ const User = require('../models/user')
 const router = new express.Router()
 
 router.get('/me', auth, (req, res) => {
-    res.status(200).send(req.user);
+    res.status(200).send(req.user.populate('role'));
 })
 
 router.get('/:id?', [auth, isAdmin], async (req, res) => {
     try {
         var data
         if (req.params.id)
-            data = await User.findOne({ _id: req.params.id });
+            data = await User.findOne({ _id: req.params.id }).populate('role');
         else
-            data = await User.find({});
+            data = await User.find({}).populate('role');
 
         if (!data) 
             return res.status(404).send({ error: true, message: "Resource not found" });
